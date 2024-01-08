@@ -3,9 +3,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { BiRupee } from "react-icons/bi";
 import { useCart } from "../Context/CartContext";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Card({ item }) {
   let optionKeys = Object.keys(item.options[0]);
+
+  const notify = () => toast.success("Logged In Successfully");
 
   const [qty, setQty] = useState(1);
   const [size, setSize] = useState("");
@@ -19,6 +23,27 @@ export default function Card({ item }) {
 
   // Adding to Cart
   const [cart, setCart] = useCart();
+
+  //  Check if LoggedIn before Adding
+  const navigate = useNavigate();
+  const AddToCart = () => {
+    if (!localStorage.getItem("authToken")) {
+      toast.error("Login First to Add Items");
+      navigate("/login");
+    } else {
+      setCart([
+        ...cart,
+        {
+          name: item.name,
+          size: size,
+          quantity: qty,
+          total: total,
+          date: Date().substring(0, 20),
+        },
+      ]);
+      toast.success("Item Added to Cart");
+    }
+  };
 
   return (
     <div className="card mb-4">
@@ -73,18 +98,7 @@ export default function Card({ item }) {
         <div className="d-flex align-items-center justify-content-center mt-2">
           <button
             className="btn btn-success text-white fw-bold"
-            onClick={() => {
-              setCart([
-                ...cart,
-                {
-                  name: item.name,
-                  size: size,
-                  quantity: qty,
-                  total: total,
-                  date: Date().substring(0, 20),
-                },
-              ]);
-            }}
+            onClick={AddToCart}
           >
             Add to Cart
           </button>

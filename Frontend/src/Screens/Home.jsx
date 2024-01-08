@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import Card from "../Components/Card";
-import Carousel from "../Components/Carousel";
 
 export default function Home() {
   const [category, setCategory] = useState([]);
@@ -18,7 +17,6 @@ export default function Home() {
     });
     response = await response.json();
 
-    //console.log(response[0], response[1]);
     setFooditem(response[0]);
     setCategory(response[1]);
   };

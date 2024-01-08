@@ -37,8 +37,20 @@ router.post(
         location: req.body.location,
       });
 
-      res.json({ success: true });
+      //res.json({ success: true });
+
+      // ----------------------
+      const email = req.body.email;
+      let userData = await User.findOne({ email });
+      const data = {
+        user: {
+          id: userData.id,
+        },
+      };
+
+      const authToken = jwt.sign(data, jwtSecret);
       console.log("New User Signed In");
+      return res.json({ success: true, authToken: authToken });
     } catch (error) {
       console.log(error);
       res.json({ success: false });
@@ -71,6 +83,7 @@ router.post(
           .json({ errors: "Try logging with Correct Credentials !" });
       }
 
+      // Matching password
       const decodedPassword = await bcrypt.compare(
         req.body.password,
         userData.password

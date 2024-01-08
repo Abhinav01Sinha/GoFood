@@ -6,6 +6,8 @@ import { useCart } from "../Context/CartContext";
 import { useOrder } from "../Context/OrderContext";
 import { useNavigate } from "react-router-dom";
 
+import toast from "react-hot-toast";
+
 export default function Cart() {
   let [cart, setCart, cartTotal] = useCart();
 
@@ -13,17 +15,27 @@ export default function Cart() {
     let myCart = [...cart];
     myCart.splice(ind, 1);
     setCart(myCart);
+    toast.success("Item Removed!");
   };
 
-  let [order, setOrder, orderTotal] = useOrder();
+  let [order, setOrder] = useOrder();
 
   const navigate = useNavigate();
+  const notify = () => toast.success("Order Placed Successfully");
+
   const checkOut = () => {
-    let myCart = [...cart];
-    setOrder([...order, myCart]);
-    setCart([]);
-    cartTotal = 0;
-    navigate("/myOrders");
+    {
+      if (cartTotal === 0) {
+        toast.error("Your Cart is Empty!");
+      } else {
+        let myCart = [...cart];
+        setOrder([...order, myCart]);
+        toast.success("Order Placed Successfully");
+        setCart([]);
+        cartTotal = 0;
+        navigate("/myOrders");
+      }
+    }
   };
 
   return (

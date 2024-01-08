@@ -4,16 +4,25 @@ import { FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "react-bootstrap";
 import { useCart } from "../Context/CartContext";
+import { useOrder } from "../Context/OrderContext";
+
+import toast from "react-hot-toast";
 
 export default function Navbar() {
+  const notify = () => toast.success("Logged Out Successfully");
+
+  let [cart, setCart, cartTotal] = useCart();
+  let [order, setOrder] = useOrder();
+
   const navigate = useNavigate();
   const handleLogOut = () => {
     localStorage.removeItem("authToken");
-    //resolve error
+    notify();
+    setCart([]);
+    setOrder([]);
+    cartTotal = 0;
     navigate("/login");
   };
-
-  const [cart] = useCart();
 
   return (
     <div>
