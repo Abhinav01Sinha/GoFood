@@ -1,5 +1,4 @@
-# Online Deploymet
-Live Link : https://gofoodordering.netlify.app/
+# Online Deploymet Link: https://gofoodordering.netlify.app/
 
 # Getting Started with Create React App
 
